@@ -17,6 +17,10 @@ const gameSchema = new Schema({
     winner: {
         type: String,
         required: false,
+    },
+    result: {
+        type: String,
+        required: false,
     }
 }, {
     timestamps: true
