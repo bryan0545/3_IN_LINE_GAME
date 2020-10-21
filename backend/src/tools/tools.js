@@ -16,4 +16,12 @@ tools.checkIfDraw = function (board) {
     return board.every(cell => cell !== '');
 }
 
+tools.changeDateFormat = function (date) {   
+    stringDate = date.toString();
+    stringDate.replace("T", " ");
+    return stringDate.substr(4,20);
+}
+
+
+
 module.exports = tools;
