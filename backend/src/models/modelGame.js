@@ -26,4 +26,12 @@ const gameSchema = new Schema({
     timestamps: true
 });
 
+gameSchema.methods.cleanGame = function cleanGame() {
+    let gameObj = this.toObject();     
+    gameObj.id = gameObj._id;
+    delete gameObj._id;
+    delete gameObj.__v; 
+    return gameObj;
+};
+
 module.exports = model('Game', gameSchema)
