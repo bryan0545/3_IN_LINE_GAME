@@ -20,8 +20,18 @@ class Game extends Component {
     }
 
     createGame = async () => {
-        // const game = await axios.post("http://localhost:5000/games");
-        // console.log('new---------->', this.state.typeGame, game);
+        const response = await axios.post("http://localhost:5000/games",{});
+        const  {board, created, currentTurn, id, status, updated, winner} = response.data;
+
+        this.setState({
+            board,
+            created, 
+            currentTurn, 
+            id, 
+            status, 
+            updated, 
+            winner
+        })        
     }
 
     getGame = async () => {
@@ -37,6 +47,24 @@ class Game extends Component {
             updated, 
             winner
         })        
+    }
+
+    updateGame = async() =>{
+        const response = await axios.put(`http://localhost:5000/games/${this.props.match.params.id}`,{
+            id: this.state.id,
+            board: this.state.board
+        } );
+    }
+
+    addMovemet = (id) =>{
+        const board = this.state.board;
+        board[id] =  this.state.currentTurn;
+        this.setState({ board })
+    }
+
+    handleClick = (id) =>{
+        this.addMovemet(id);
+        this.updateGame();
     }
 
     callAPI = async () => {
@@ -67,15 +95,9 @@ class Game extends Component {
         const board = this.state.board;
         return (
             <StyledBoard>
-                <div className="cell" >{board[0]}</div>
-                <div className="cell" >{board[1]}</div>
-                <div className="cell" >{board[3]}</div>
-                <div className="cell" >{board[4]}</div>
-                <div className="cell" >{board[5]}</div>
-                <div className="cell" >{board[6]}</div>
-                <div className="cell" >{board[7]}</div>
-                <div className="cell" >{board[8]}</div>
-                <div className="cell" >{board[9]}</div>
+                {board.map( (cell, id) => 
+                    <div key = {id} className="cell" onClick = {()=>this.handleClick(id)}>{cell}</div>
+                )}
             </StyledBoard>
         );
     }
