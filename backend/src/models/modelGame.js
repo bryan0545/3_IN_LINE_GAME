@@ -14,7 +14,7 @@ const gameSchema = new Schema({
     },
     board: {
         type: [String],
-        default: ["","","","","","","","",""],
+        default: ['','','','','','','','',''],
         required: false,
     },
     winner: {
