@@ -9,51 +9,53 @@ class Game extends Component {
         super()
 
         this.state = {
-            board: ["","","","","","","","",""],
-            created: "",
+            board: ["","","","","","","","",""],            
             currentTurn: "",
             id: "",
-            status: "",
-            updated: "",
+            status: "",            
             winner: ""
         }
     }
 
     createGame = async () => {
         const response = await axios.post("http://localhost:5000/games",{});
-        const  {board, created, currentTurn, id, status, updated, winner} = response.data;
+        console.log('creo juego')
+        const  {board,  currentTurn, id, status, winner} = response.data;
 
         this.setState({
             board,
-            created, 
             currentTurn, 
-            id, 
-            status, 
-            updated, 
-            winner
+            id,  
+            status,  
+            winner         
         })        
     }
 
     getGame = async () => {
-        const response = await axios.get(`http://localhost:5000/games/${this.props.match.params.id}`);
-        const  {board, created, currentTurn, id, status, updated, winner} = response.data;
+        const response = await axios.get(`http://localhost:5000/games/${this.state.id}`);
+        const  {board, currentTurn, id, status, winner} = response.data;
+        console.log('llamo un stated game')
 
         this.setState({
             board,
-            created, 
             currentTurn, 
             id, 
             status, 
-            updated, 
             winner
         })        
     }
 
     updateGame = async() =>{
-        const response = await axios.put(`http://localhost:5000/games/${this.props.match.params.id}`,{
-            id: this.state.id,
+        const response = await axios.put(`http://localhost:5000/games/${this.state.id}`,{
             board: this.state.board
-        } );
+        });
+        console.log('actualizo juego')
+
+        this.setState({
+            currentTurn: response.data.currentTurn,
+            status:response.data.status, 
+            winner:response.data.winner
+        })        
     }
 
     addMovemet = (id) =>{
@@ -73,16 +75,9 @@ class Game extends Component {
         } else {
             this.createGame();
         }
-    }
+    }   
 
-    checkComponentType = () => {
-        if (this.props.match.params.id) {
-            this.setState({ typeGame: "started" })
-        }
-    }
-
-    processComponent = () => {
-        this.checkComponentType();
+    processComponent = () => {  
         this.callAPI();
     }
 
