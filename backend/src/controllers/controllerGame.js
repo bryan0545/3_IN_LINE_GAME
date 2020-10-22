@@ -48,42 +48,54 @@ const postGame = (async (req, res) => {
 
 const putGame = (async (req, res) => {
 
-    const oldGame = await gameModel.findById(req.params.id);
 
-    if (oldGame !== null) {
-        if (!req.params.id || !req.body || !req.body.board) {
-            res.json({ message: 'Missing board to update the game.' });
-        } else if (oldGame.status !== 'started') {
-            res.json({ Message: 'The game is over' });
-        } else {
-            console.log("CONTINUE")
-            try {
-                await gameModel.findOneAndUpdate(req.params.id, {
-                    board: req.body.board,
-                });
-                const game = await gameModel.findById(req.params.id);
-                res.json({
-                    message: "Game Updated",
-                    data: game.cleanGame(),
-                    error: ""
-                });
-            } catch (error) {
-                console.log('**************** error')
-                console.log(error.message)
-                res.json({
-                    message: "",
-                    data: {},
-                    error: error.message
-                });
-            }
-        }
+
+    // const oldGame = await gameModel.findById(req.params.id);    
+    // if (oldGame !== null) {
+    if (!req.params.id || !req.body || !req.body.board) {
+        res.json({ message: 'Missing board to update the game.' });
+    } else if (req.body.status !== 'started') {
+        res.json({ Message: 'The game is over' });
     } else {
-        res.json({
-            message: "",
-            data: {},
-            error: "Game not Found"
-        });
+        console.log("CONTINUE")
+        try {
+            const { id, currentTurn, status, board, winner, result } = req.body;
+            // console.log(currentTurn, status, board, winner, result)
+            console.log("param ID llego ----- ",  req.params. id)  
+            console.log("ID llego ----- ",  id)
+            console.log("llego ----- ",  JSON.stringify(board) ) 
+
+            const test = await gameModel.findByIdAndUpdate(id, {
+                currentTurn,
+                status,
+                board,
+                winner,
+                result
+            });
+            // const game = await gameModel.findById(id);
+            console.log('---test ID', test);
+            // console.log("se fue ID ----- ", game._id)
+            // console.log("se fue ----- ", game.board)  
+            res.json({
+                message: "Game Updated",
+                data: test.cleanGame(),
+                error: ""
+            });
+        } catch (error) {
+            res.json({
+                message: "",
+                data: {},
+                error: error.message
+            });
+        }
     }
+    // } else {
+    //     res.json({
+    //         message: "",
+    //         data: {},
+    //         error: "Game not Found"
+    //     });
+    // }
 
 
 
@@ -115,7 +127,7 @@ const putGame = (async (req, res) => {
 
 
 const getGame = async (req, res) => {
-    const game = await gameModel.findById(req.params.id);    
+    const game = await gameModel.findById(req.params.id);
     if (game !== null) {
         res.json({
             message: "",
