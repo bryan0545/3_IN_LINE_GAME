@@ -4,23 +4,27 @@ const tools = require('../tools/tools');
 const gameSchema = new Schema({
     currentTurn: {
         type: String,
-        required: true,
+        default: 'x',
+        required: false,
     },
     status: {
         type: String,
         default: 'started',
-        required: true,
+        required: false,
     },
     board: {
         type: [String],
-        required: true,
+        default: ["","","","","","","","",""],
+        required: false,
     },
     winner: {
         type: String,
+        default: "",
         required: false,
     },
     result: {
         type: String,
+        default: "",
         required: false,
     }
 }, {

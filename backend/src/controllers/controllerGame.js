@@ -42,14 +42,10 @@ const getGames = (async (req, res) => {
     res.json(returnedGames);
 });
 
-const postGame = (async (req, res) => {
-    if (!req.body || !req.body.currentTurn || !req.body.status || !req.body.board) {
-        res.send({ message: 'Missing data to create the game.' });
-    } else {
-        const newGame = new gameModel(req.body)
+const postGame = (async (req, res) => { 
+        const newGame = new gameModel()
         const dbGame = await newGame.save();
-        res.send(dbGame)
-    }
+        res.send(dbGame.cleanGame())   
 });
 
 const putGame = (async (req, res) => {
