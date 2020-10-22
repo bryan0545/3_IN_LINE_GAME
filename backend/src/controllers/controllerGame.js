@@ -1,37 +1,37 @@
 const gameModel = require('../models/modelGame');
 const tools = require('../tools/tools');
 
-const putController = async (id, body) => {
-    const { currentTurn, board } = body;
-    //Check for win
-    if (tools.checkIfWin(body.currentTurn, body.board)) {
-        console.log("WIN", tools.checkIfWin(body.currentTurn, body.board));
-        await gameModel.findOneAndUpdate(id,
-            {
-                currentTurn,
-                board,
-                status: "finished",
-                winner: currentTurn === "X" ? "O" : "X",
-                result: "won"
-            });
-            return;
+const putController = async (id, newBoard) => {
+    const game = await gameModel.findById(id);
+    let { currentTurn, status, winner, result } = game;  
+    const board = newBoard;
+    
+    // Check for win
+    if (tools.checkIfWin(board)) {
+        console.log("WIN");        
+        status = "finished";
+        winner = game.currentTurn;
+        result = "won";
     }
-    //Check for win
-    if (tools.checkIfDraw(body.board)) {
-        console.log("DRAW", tools.checkIfDraw(body.board))
-        await gameModel.findOneAndUpdate(id,
-            {
-                currentTurn,
-                board,
-                status: "finished",
-                winner: currentTurn === "X" ? "O" : "X",
-                result: "draw"
-            });
-            return;
+    // Check for draw
+    else if (tools.checkIfDraw(board)) {
+        console.log("DRAW");       
+        status = "finished";        
+        result = "draw";
     }
-    //If the game continue
-    console.log("CONTINUE")
-    await gameModel.findOneAndUpdate(id, body);
+    // Continue the game
+    else {
+        console.log("CONTINUE")
+        currentTurn = tools.nextTurn(currentTurn);       
+    }
+     
+     await gameModel.findOneAndUpdate(id, {
+        currentTurn,
+        board,
+        status,
+        winner,
+        result
+    })    
 }
 
 const getGames = (async (req, res) => {
@@ -42,21 +42,19 @@ const getGames = (async (req, res) => {
     res.json(returnedGames);
 });
 
-const postGame = (async (req, res) => { 
-        const newGame = new gameModel()
-        const dbGame = await newGame.save();
-        res.send(dbGame.cleanGame())   
+const postGame = (async (req, res) => {
+    const newGame = new gameModel()
+    const dbGame = await newGame.save();
+    res.send(dbGame.cleanGame())
 });
 
 const putGame = (async (req, res) => {
-    if (!req.params.id || !req.body || !req.body.currentTurn || !req.body.board) {
-        res.send({ message: 'Missing data to update the game.' });
-    } else if (req.body.status !== 'started') {
-        res.send({ message: 'The game is over' });
-    }
-    else {
-        putController(req.params.id, req.body);
+    if (!req.params.id || !req.body || !req.body.board) {
+        res.send({ message: 'Missing board to update the game.' });
+    } else {
+        await putController(req.params.id, req.body.board);
         const game = await gameModel.findById(req.params.id);
+       
         res.send(game.cleanGame());
     }
 });

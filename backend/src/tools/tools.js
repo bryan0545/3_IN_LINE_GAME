@@ -1,13 +1,13 @@
 const constants = require('../constants/constants')
 const tools = {};
 
-tools.checkIfWin = function (currentTurn, board) {
+tools.checkIfWin = function (board) {
     return constants.COMBINATION_TO_WIN.some(combination =>
         (board[combination[0]] !== '' &&
             board[combination[1]] !== '' &&
             board[combination[2]] !== '' &&
-            board[combination[0]] === board[combination[1]] &&
-            board[combination[1]] === board[combination[2]]
+            board[combination[0]].toLowerCase() === board[combination[1]].toLowerCase() &&
+            board[combination[1]].toLowerCase() === board[combination[2]].toLowerCase()
         )
     )
 }
@@ -22,6 +22,9 @@ tools.changeDateFormat = function (date) {
     return stringDate.substr(4,20);
 }
 
+tools.nextTurn = function (currentTurn) {   
+    return currentTurn.toLowerCase() === "x" ? "o" : "x";
+}
 
 
 module.exports = tools;
