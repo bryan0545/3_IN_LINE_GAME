@@ -17,11 +17,12 @@ class Game extends Component {
         }
     }
 
-    getGame = async () => {        
+    getGame = async () => {    
+          
         const id = this.props.match.params.id;
         const response = await axios.get(`http://localhost:5000/games/${id}`);
         const { board, currentTurn, status, winner } = response.data.data;
-        console.log("get ", id)
+        
         this.setState({
             board,
             currentTurn,
@@ -33,21 +34,19 @@ class Game extends Component {
 
     updateGame = async () => {
         const response = await axios.put(`http://localhost:5000/games/${this.state.id}`, {
-            id:this.state.id,
             currentTurn:this.state.currentTurn,
             status:this.state.status,
             board:this.state.board,
             winner:this.state.winner,
-            result:this.state.result 
+            result:this.state.result,
+            id:this.state.id,
         });
-        console.log(response.data.data)
-        
+                
         this.setState({
             currentTurn: response.data.data.currentTurn,
             status: response.data.data.status,
             winner: response.data.data.winner
-        })
-        console.log("response " , response)
+        })      
     }
 
     addMovemet = (id) => {
@@ -60,9 +59,21 @@ class Game extends Component {
       this.props.history.goBack();
     }
 
-    handleClick = (id) => {
-        this.addMovemet(id);
-        this.updateGame();
+    cellEvents = (id) => {
+        var cells = document.getElementsByClassName('cell');
+        cells[id].classList.add('mark')
+        
+        console.log(cells[id].classList)
+    }
+
+    
+
+    handleClick = (id) => {        
+        if(!this.state.board[id] && this.state.status === "started"){
+            this.addMovemet(id);
+            this.updateGame();
+            // this.cellEvents(id);
+        }
     }
 
     componentDidMount() {
@@ -71,11 +82,15 @@ class Game extends Component {
 
     render() {
         const board = this.state.board;
+        
         return (
             <>
                 <StyledBoard>
                     {board.map((cell, id) =>
-                        <div key={id} className="cell" onClick={() => this.handleClick(id)}>{cell}</div>
+                        <div    
+                        key={id} 
+                        className="cell" 
+                        onClick={() => this.handleClick(id)}>{cell}</div>
                     )}
                 </StyledBoard>
                 <button onClick = {this.handleBack}>atras</button>
@@ -98,6 +113,7 @@ grid-template-columns: repeat(3, auto);
     width:${constants.BOARD.CELL_SIZE};
     height:${constants.BOARD.CELL_SIZE};    
     border: 1px solid black;
+    cursor: pointer;
 }
 .cell:nth-child(1n+1){
     border-top:none;
@@ -110,5 +126,9 @@ grid-template-columns: repeat(3, auto);
 }
 .cell:nth-child(1n+7){
     border-bottom:none;
+}
+.mark{
+    background-color:red;
+    cursor: not-allowed;
 }
 `

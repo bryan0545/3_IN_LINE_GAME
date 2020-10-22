@@ -39,11 +39,9 @@ const Games = () => {
                                         <td>{game.winner}</td>
                                         <td>{game.created}</td>
                                         <td>{game.updated}</td>
-                                        {game.status === 'started' &&
-                                            <td>
-                                                <Link to={`/game/${id}`}>CONTINUE</Link>
-                                            </td>
-                                        }
+                                        <td>
+                                            <Link to={`/game/${id}`}>{game.status !== 'started' ? "VIEW" : "CONTINUE" }</Link>
+                                        </td>
                                     </tr>
                                 )
                             }
@@ -69,7 +67,6 @@ const StyledTable = styled.div`
     margin-top: 10px;
     overflow-x:hidden;
     overflow-y:auto;
-
 
 table{  
     width:100%;  
