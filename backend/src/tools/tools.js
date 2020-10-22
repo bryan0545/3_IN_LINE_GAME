@@ -23,7 +23,7 @@ tools.changeDateFormat = function (date) {
 }
 
 tools.nextTurn = function (currentTurn) {   
-    return currentTurn.toLowerCase() === "x" ? "o" : "x";
+    return currentTurn.toLowerCase() !== "x" ? "x" : "o";
 }
 
 

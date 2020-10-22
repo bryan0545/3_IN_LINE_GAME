@@ -36,8 +36,6 @@ const postGame = (async (req, res) => {
             error: ""
         });
     } catch (error) {
-        console.log(error.message)
-        console.log('************ error')
         res.json({
             message: "",
             data: {},
@@ -48,37 +46,48 @@ const postGame = (async (req, res) => {
 
 const putGame = (async (req, res) => {
 
-
-
-    // const oldGame = await gameModel.findById(req.params.id);    
-    // if (oldGame !== null) {
     if (!req.params.id || !req.body || !req.body.board) {
-        res.json({ message: 'Missing board to update the game.' });
+        res.json({
+            message: "",
+            data: {},
+            error: "Missing board to update the game."
+        });       
     } else if (req.body.status !== 'started') {
-        res.json({ Message: 'The game is over' });
+        console.log("The game is over")
+        res.json({
+            message: "The game is over",
+            data: {},
+            error: ""
+        }); 
     } else {
-        console.log("CONTINUE")
-        try {
-            const { id, currentTurn, status, board, winner, result } = req.body;
-            // console.log(currentTurn, status, board, winner, result)
-            console.log("param ID llego ----- ",  req.params. id)  
-            console.log("ID llego ----- ",  id)
-            console.log("llego ----- ",  JSON.stringify(board) ) 
+        const body = req.body
 
-            const test = await gameModel.findByIdAndUpdate(id, {
-                currentTurn,
-                status,
-                board,
-                winner,
-                result
-            });
-            // const game = await gameModel.findById(id);
-            console.log('---test ID', test);
-            // console.log("se fue ID ----- ", game._id)
-            // console.log("se fue ----- ", game.board)  
+        // Check for win
+        if (tools.checkIfWin(body.board)) {
+            console.log("WIN");
+            body.status = "finished";
+            body.winner = body.currentTurn;
+            body.result = "won";
+        }
+        // Check for draw
+        else if (tools.checkIfDraw(req.body.board)) {
+            console.log("DRAW");
+            body.status = "finished";
+            body.result = "draw";
+        }
+        // Continue the game
+        else {
+            console.log("CONTINUE")
+            body.currentTurn = tools.nextTurn(body.currentTurn);
+        }
+
+        try {            
+            await gameModel.findByIdAndUpdate(req.params.id, body);
+            const response = await gameModel.findById(req.params.id);
+
             res.json({
                 message: "Game Updated",
-                data: test.cleanGame(),
+                data: response.cleanGame(),
                 error: ""
             });
         } catch (error) {
@@ -89,40 +98,6 @@ const putGame = (async (req, res) => {
             });
         }
     }
-    // } else {
-    //     res.json({
-    //         message: "",
-    //         data: {},
-    //         error: "Game not Found"
-    //     });
-    // }
-
-
-
-    // // Check for win
-    // if (tools.checkIfWin(req.body.board)) {
-    //     console.log("WIN");
-    //     await gameModel.findOneAndUpdate(req.params.id, {
-    //         currentTurn,
-    //         status: "finished",
-    //         board: req.body.board,
-    //         winner: currentTurn,
-    //         result: "won"
-    //     });
-    //     const game = await gameModel.findById(req.params.id);
-    //     res.json(game.cleanGame());
-    // }
-    //     // Check for draw
-    //     else if (tools.checkIfDraw(req.body.board)) {
-    //         console.log("DRAW");       
-    //         oldGame.status = "finished";        
-    //         oldGame.result = "draw";
-    //     }
-    //     // Continue the game
-    // else {
-
-    // }
-
 });
 
 
