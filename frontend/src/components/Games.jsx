@@ -9,14 +9,13 @@ const Games = () => {
 
     const getGames = async () => {
         const games = await axios.get("http://localhost:5000/games");
-        console.log(games.data);
-        setGames(games.data);
+        // console.log(games.data);
+        setGames(games.data.data);
     }
 
     useEffect(() => {
         getGames();
     }, [])
-
 
     return (
         <>
@@ -42,7 +41,7 @@ const Games = () => {
                                         <td>{game.updated}</td>
                                         {game.status === 'started' &&
                                             <td>
-                                                <Link to={`/game/${id}`} >CONTINUE</Link>
+                                                <Link to={`/game/${id}`}>CONTINUE</Link>
                                             </td>
                                         }
                                     </tr>

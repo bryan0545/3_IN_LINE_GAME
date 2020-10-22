@@ -1,14 +1,24 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import styled from 'styled-components';
+import axios from 'axios';
 
-const NewGameButton = () => {
+
+const NewGameButton = (props) => {
+
+    const createGame = async () => {
+        const response = await axios.post("http://localhost:5000/games", {});        
+        const { id } = response.data.data;
+        props.history.push(`/game/${id}`);
+        console.log('new ', id)
+    }
+
     return (
-        <StyledNewButton to="/game">New Game</StyledNewButton>
+        <button onClick={createGame}>New Game</button>
     )
 }
 
-export default NewGameButton;
+export default withRouter(NewGameButton);
 
 const StyledNewButton = styled(Link)`
 text-decoration:none;

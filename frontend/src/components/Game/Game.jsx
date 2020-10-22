@@ -9,91 +9,77 @@ class Game extends Component {
         super()
 
         this.state = {
-            board: ["","","","","","","","",""],            
+            board: ["", "", "", "", "", "", "", "", ""],
             currentTurn: "",
             id: "",
-            status: "",            
+            status: "",
             winner: ""
         }
     }
 
-    createGame = async () => {
-        const response = await axios.post("http://localhost:5000/games",{});
-        console.log('creo juego')
-        const  {board,  currentTurn, id, status, winner} = response.data;
-
+    getGame = async () => {        
+        const id = this.props.match.params.id;
+        const response = await axios.get(`http://localhost:5000/games/${id}`);
+        const { board, currentTurn, status, winner } = response.data.data;
+        console.log("get ", id)
         this.setState({
             board,
-            currentTurn, 
-            id,  
-            status,  
-            winner         
-        })        
-    }
-
-    getGame = async () => {
-        const response = await axios.get(`http://localhost:5000/games/${this.state.id}`);
-        const  {board, currentTurn, id, status, winner} = response.data;
-        console.log('llamo un stated game')
-
-        this.setState({
-            board,
-            currentTurn, 
-            id, 
-            status, 
+            currentTurn,
+            id,
+            status,
             winner
-        })        
+        })
     }
 
-    updateGame = async() =>{
-        const response = await axios.put(`http://localhost:5000/games/${this.state.id}`,{
-            board: this.state.board
+    updateGame = async () => {
+        const response = await axios.put(`http://localhost:5000/games/${this.state.id}`, {
+            id:this.state.id,
+            currentTurn:this.state.currentTurn,
+            status:this.state.status,
+            board:this.state.board,
+            winner:this.state.winner,
+            result:this.state.result 
         });
-        console.log('actualizo juego')
-
+        console.log(response.data.data)
+        
         this.setState({
-            currentTurn: response.data.currentTurn,
-            status:response.data.status, 
-            winner:response.data.winner
-        })        
+            currentTurn: response.data.data.currentTurn,
+            status: response.data.data.status,
+            winner: response.data.data.winner
+        })
+        console.log("response " , response)
     }
 
-    addMovemet = (id) =>{
+    addMovemet = (id) => {
         const board = this.state.board;
-        board[id] =  this.state.currentTurn;
+        board[id] = this.state.currentTurn;
         this.setState({ board })
     }
 
-    handleClick = (id) =>{
+    handleBack = () => {
+      this.props.history.goBack();
+    }
+
+    handleClick = (id) => {
         this.addMovemet(id);
         this.updateGame();
     }
 
-    callAPI = async () => {
-        if (this.props.match.params.id) {
-            this.getGame();
-        } else {
-            this.createGame();
-        }
-    }   
-
-    processComponent = () => {  
-        this.callAPI();
-    }
-
     componentDidMount() {
-        this.processComponent();
+        this.getGame();
     }
 
     render() {
-        console.log(this.state)
         const board = this.state.board;
         return (
-            <StyledBoard>
-                {board.map( (cell, id) => 
-                    <div key = {id} className="cell" onClick = {()=>this.handleClick(id)}>{cell}</div>
-                )}
-            </StyledBoard>
+            <>
+                <StyledBoard>
+                    {board.map((cell, id) =>
+                        <div key={id} className="cell" onClick={() => this.handleClick(id)}>{cell}</div>
+                    )}
+                </StyledBoard>
+                <button onClick = {this.handleBack}>atras</button>
+            </>
         );
     }
 }
