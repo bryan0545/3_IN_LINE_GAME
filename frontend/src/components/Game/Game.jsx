@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import axios from 'axios';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import constants from './../../constants/cosntants';
 
 class Game extends Component {
@@ -17,12 +17,12 @@ class Game extends Component {
         }
     }
 
-    getGame = async () => {    
-          
+    getGame = async () => {
+
         const id = this.props.match.params.id;
         const response = await axios.get(`http://localhost:5000/games/${id}`);
         const { board, currentTurn, status, winner } = response.data.data;
-        
+
         this.setState({
             board,
             currentTurn,
@@ -34,19 +34,19 @@ class Game extends Component {
 
     updateGame = async () => {
         const response = await axios.put(`http://localhost:5000/games/${this.state.id}`, {
-            currentTurn:this.state.currentTurn,
-            status:this.state.status,
-            board:this.state.board,
-            winner:this.state.winner,
-            result:this.state.result,
-            id:this.state.id,
+            currentTurn: this.state.currentTurn,
+            status: this.state.status,
+            board: this.state.board,
+            winner: this.state.winner,
+            result: this.state.result,
+            id: this.state.id,
         });
-                
+
         this.setState({
             currentTurn: response.data.data.currentTurn,
             status: response.data.data.status,
             winner: response.data.data.winner
-        })      
+        })
     }
 
     addMovemet = (id) => {
@@ -56,20 +56,19 @@ class Game extends Component {
     }
 
     handleBack = () => {
-      this.props.history.goBack();
+        this.props.history.goBack();
     }
 
     cellEvents = (id) => {
         var cells = document.getElementsByClassName('cell');
         cells[id].classList.add('mark')
-        
+
         console.log(cells[id].classList)
     }
 
-    
 
-    handleClick = (id) => {        
-        if(!this.state.board[id] && this.state.status === "started"){
+    handleClick = (id) => {
+        if (!this.state.board[id] && this.state.status === "started") {
             this.addMovemet(id);
             this.updateGame();
             // this.cellEvents(id);
@@ -81,19 +80,23 @@ class Game extends Component {
     }
 
     render() {
-        const board = this.state.board;
-        
+        const { board, status } = this.state;        
+
         return (
             <>
                 <StyledBoard>
                     {board.map((cell, id) =>
-                        <div    
-                        key={id} 
-                        className="cell" 
-                        onClick={() => this.handleClick(id)}>{cell}</div>
+                        <StyledCell
+                            disable={board[id]}
+                            gameOver = {status !== "started"}
+                            key={id}
+                            className="cell"
+                            onClick={() => this.handleClick(id)}>
+                            {cell}
+                        </StyledCell>
                     )}
                 </StyledBoard>
-                <button onClick = {this.handleBack}>atras</button>
+                <button onClick={this.handleBack}>atras</button>
             </>
         );
     }
@@ -112,8 +115,7 @@ grid-template-columns: repeat(3, auto);
 .cell{
     width:${constants.BOARD.CELL_SIZE};
     height:${constants.BOARD.CELL_SIZE};    
-    border: 1px solid black;
-    cursor: pointer;
+    border: 1px solid};
 }
 .cell:nth-child(1n+1){
     border-top:none;
@@ -127,8 +129,30 @@ grid-template-columns: repeat(3, auto);
 .cell:nth-child(1n+7){
     border-bottom:none;
 }
-.mark{
-    background-color:red;
-    cursor: not-allowed;
-}
 `
+
+const StyledCell = styled.div`
+
+    ${({ disable }) => disable && css`
+        background-color: rgba(0, 0, 0, 0.01);
+        cursor: not-allowed;
+        &:hover{
+            box-shadow: none;
+        }
+    `}
+
+    ${({ disable }) => !disable && css`
+        &:hover{
+            box-shadow: 0 3px 8px 0 rgba(255,0,0, .08  )
+        }
+    `}
+
+    ${({ gameOver }) => gameOver && css`
+        &:hover{
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+    `}; 
+`
+
+
