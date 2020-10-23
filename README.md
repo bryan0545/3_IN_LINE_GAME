@@ -6,7 +6,17 @@ This is a repo of Web App created using React, Styled Components, Node.js, Expre
 
 ## Setup
 ### Backend
-The backend needs a database in mongoDB. So you should have mongoDB installed on your computer. 
+The backend needs a database in mongoDB. So you should have mongoDB installed on your computer.
+
+The node version is v12.18.1, so you can check it with next command.
+```bash 
+node -v 
+```
+
+If it's different you should use next command.
+```bash 
+nvm install 12.18.1
+```
 
 #### Running
 Enter to backend folder and run the next commands on bash.
@@ -150,9 +160,9 @@ N/A
 ```
 
 
-### Forntend
+### Frontend
 #### Running
-Enter to forntend folder and run the next commands on bash.
+Enter to frontend folder and run the next commands on bash.
 
 Install all dependencies.
 ```bash 
