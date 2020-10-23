@@ -73,20 +73,20 @@ const putGame = (async (req, res) => {
         else {
             body.currentTurn = tools.nextTurn(body.currentTurn);
         }
-
-        try {            
-            await gameModel.findByIdAndUpdate(req.params.id, body);
-            const response = await gameModel.findById(req.params.id);
+                    
+        await gameModel.findByIdAndUpdate(req.params.id, body);
+        const response = await gameModel.findById(req.params.id);
+        if(response){
             res.json({
                 message: 'Game Updated',
                 data: response.cleanGame(),
                 error: '',
             });
-        } catch (error) {
+        }else{
             res.json({
                 message: '',
                 data: {},
-                error: error.message,
+                error: 'Game not Found',
             });
         }
     }
@@ -97,7 +97,7 @@ const getGame = async (req, res) => {
     const game = await gameModel.findById(req.params.id);
     if (game !== null) {
         res.json({
-            message: '',
+            message: 'Game found',
             data: game.cleanGame(),
             error: '',
         });

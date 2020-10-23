@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
+    "NodemonDev": "nodemon src/index.js",
+    "dev": "node src/index.js",
     "lintDev": "eslint src/**"
   },
   "keywords": [],
