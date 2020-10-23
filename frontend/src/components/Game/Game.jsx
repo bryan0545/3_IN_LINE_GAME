@@ -4,6 +4,8 @@ import axios from 'axios';
 import styled, { css } from 'styled-components';
 import constants from './../../constants/cosntants';
 import ModalWindow from '../ModalWindow/ModalWindow';
+import { StyledNewButton } from './../Buttons/styleButton';
+import NewGameButton from './../Buttons/NewGameButton';
 
 class Game extends Component {
     constructor() {
@@ -98,7 +100,7 @@ class Game extends Component {
         const gameOver = status !== "started";
         console.log(status)
         return (
-            <>
+            <GameStyled>
                 {
                     showModal && <ModalWindow
                         title={`Game over, ${result} ${winner}`}
@@ -106,16 +108,8 @@ class Game extends Component {
                     />
                 }
                 <StyledTurn>
-                    {`Current Turn ${currentTurn}`}
+                    {`Current Turn " ${currentTurn} "`}
                 </StyledTurn>
-
-
-                    {/* turno */}
-
-
-
-
-
                 <StyledBoard>
                     {board.map((cell, id) =>
                         <StyledCell
@@ -128,41 +122,67 @@ class Game extends Component {
                         </StyledCell>
                     )}
                 </StyledBoard>
-                <button onClick={this.handleBack}>atras</button>
-            </>
+                <StyledButtonsDiv>
+                    <StyledNewButton onClick={this.handleBack}>atras</StyledNewButton>
+                    <NewGameButton/>
+                </StyledButtonsDiv>
+            </GameStyled>
         );
     }
 }
 
 export default withRouter(Game);
 
+
+const GameStyled = styled.div`
+    margin: 70px 50px ;
+`
+
+const StyledButtonsDiv = styled.div`
+    display:flex;
+    justify-content:center;
+    button{
+        margin: 0 30px;
+    }
+`
+
 const StyledTurn = styled.div`
+    text-transform:capitalize;
+    font-size: 18px;
+    font-weight:bold;
     width: 180px;
     height: 60px;
     margin:auto;
-    border: solid 1px black ;
+    border-bottom: solid 2px ${constants.COLORS.THREETH} ;
     text-align:center;
     display:flex;
     justify-content: center;
     align-items:center;
-    border-radius: 15px;    
-`
+    border-radius: 15px;  
+    background-color: ${constants.COLORS.SECOND}; 
+    color : ${constants.COLORS.THREETH};`
 
 const StyledBoard = styled.div`
-margin: 20px auto;
+margin: 20px auto 40px auto;
 display:grid;
 justify-content:center;
 align-content:center;
 grid-template-columns: repeat(3, auto);
 
-
 .cell{
+    display:flex;
+    justify-content:center;
+    align-items:center;
     width:${constants.BOARD.CELL_SIZE};
     height:${constants.BOARD.CELL_SIZE};    
-    border: 1px solid;
+    border-left: 6px solid ${constants.COLORS.GRID};
+    border-bottom: 6px solid ${constants.COLORS.GRID};
+    font-size:${constants.BOARD.CELL_SIZE};
 }
+
 .cell:nth-child(1n+1){
     border-top:none;
+    
 }
 .cell:nth-child(3n+1){
     border-left:none;
@@ -185,7 +205,7 @@ const StyledCell = styled.div`
 
     ${({ disable }) => !disable && css`
         &:hover{
-            box-shadow: 0 3px 8px 0 rgba(255,0,0, .08)
+            box-shadow: ${constants.COLORS.SHADOW_THREETH_LOW};
         }
     `}
 
@@ -195,6 +215,14 @@ const StyledCell = styled.div`
             cursor: not-allowed;
         }
     `}; 
+
+    ${({ disable }) => disable === 'x' && css`
+        color: ${constants.COLORS.X}
+    `}
+    
+    ${({ disable }) => disable === 'o' && css`
+        color: ${constants.COLORS.O}
+    `}
 `
 
 

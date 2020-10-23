@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import axios from 'axios';
-import styled from 'styled-components'
-import NewGameButton from './NewGameButton';
-import constants from './../constants/cosntants'
+import styled from 'styled-components';
+import NewGameButton from './Buttons/NewGameButton';
+import constants from './../constants/cosntants';
 
 const Games = () => {
     const [games, setGames] = useState({});
@@ -117,7 +117,7 @@ table{
        &:hover{
             color: ${constants.COLORS.BODY};        
             background-color:${constants.COLORS.THREETH};
-            box-shadow:${constants.COLORS.SHADOW_THREETH}
+            box-shadow:${constants.COLORS.SHADOW_THREETH_HIGH}
         }
     }
 }
