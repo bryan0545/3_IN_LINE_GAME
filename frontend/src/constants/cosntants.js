@@ -1,4 +1,3 @@
-
 const constants = {}; 
 
 constants.BOARD = {

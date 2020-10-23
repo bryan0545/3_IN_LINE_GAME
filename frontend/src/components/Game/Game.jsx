@@ -5,7 +5,6 @@ import styled, { css } from 'styled-components';
 import constants from './../../constants/cosntants';
 import ModalWindow from '../ModalWindow/ModalWindow';
 import { StyledNewButton } from './../Buttons/styleButton';
-import NewGameButton from './../Buttons/NewGameButton';
 
 class Game extends Component {
     constructor() {
@@ -101,8 +100,12 @@ class Game extends Component {
         const gameOver = status !== "started";
         console.log(status)
         return (
+            
             <GameStyled>
                 {
+                    gameOver && <StyledTitle>Game over, {result} " {winner.toLocaleUpperCase()} "</StyledTitle>
+                }
+                {                    
                     showModal && <ModalWindow
                         title={`Game over, ${result} " ${winner.toLocaleUpperCase()} "`}
                         handleModal={this.handleModal}
@@ -124,8 +127,7 @@ class Game extends Component {
                     )}
                 </StyledBoard>
                 <StyledButtonsDiv>
-                    <StyledNewButton onClick={this.handleBack}>atras</StyledNewButton>
-                    <NewGameButton/>
+                    <StyledNewButton onClick={this.handleBack}>Go Back</StyledNewButton>              
                 </StyledButtonsDiv>
             </GameStyled>
         );
@@ -134,6 +136,13 @@ class Game extends Component {
 
 export default withRouter(Game);
 
+
+const StyledTitle = styled.p`
+    color: ${constants.COLORS.THREETH};
+    text-align: center;
+    font-size: 30px;
+    font-weight:bold;
+`
 
 const GameStyled = styled.div`
     margin: 70px 50px ;

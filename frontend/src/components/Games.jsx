@@ -39,8 +39,8 @@ const Games = () => {
                                 return (
                                     <tr key={id}>
                                         <td>{game.status}</td>
-                                        <td>{game.result}</td>
-                                        <td>{game.winner}</td>
+                                        <td>{game.result ? game.result :'in Proccess'}</td>
+                                        <td>{game.winner ? game.winner:'-'}</td>
                                         <td>{game.created}</td>
                                         <td>{game.updated}</td>
                                         <td>
@@ -90,7 +90,7 @@ table{
         background-color: ${constants.COLORS.BODY};
         position: sticky;  
         top: 0;
-        color: ${constants.COLORS.SECOND_LETER};
+        color: ${constants.COLORS.THREETH};
         border-bottom: solid 1px ${constants.COLORS.PRIMARY};        
         padding-bottom: 5px;
     }

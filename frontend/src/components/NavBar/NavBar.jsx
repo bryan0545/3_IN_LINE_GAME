@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+// import { Navbar } from 'react-bootstrap';
 import styled from 'styled-components';
 import constants from './../../constants/cosntants'
 
@@ -7,7 +8,7 @@ const Navigation = () => {
     return (
         <StyledNavbar>
             <ul>                
-                <li> <Link to="/games">Games</Link ></li>
+                <li> <Link to="/">Games</Link ></li>
             </ul>
         </StyledNavbar>
     );

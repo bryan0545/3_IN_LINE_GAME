@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import cosntants from './../../constants/cosntants';
-import NewGameButton from './../Buttons/NewGameButton';
 
 
 const ModalWindow = ({ title, handleModal }) => {
@@ -9,7 +8,7 @@ const ModalWindow = ({ title, handleModal }) => {
         <StyledModal onClick = {handleModal}>
             <StyledModalContent>
                 <p>{title}</p>
-                <NewGameButton/>
+                
             </StyledModalContent>
         </StyledModal>
     );
@@ -49,7 +48,5 @@ const StyledModalContent = styled.div`
         font-size:20px;
         margin:5px;
     }
-    button{
-        margin-top:10px;
-    }
+  
 `
