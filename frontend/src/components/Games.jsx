@@ -24,9 +24,11 @@ const Games = () => {
                     <thead>
                         <tr>
                             <th>Status</th>
+                            <th>Result</th>
                             <th>Winner</th>
                             <th>Created</th>
                             <th>Last update</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,6 +38,7 @@ const Games = () => {
                                 return (
                                     <tr key={id}>
                                         <td>{game.status}</td>
+                                        <td>{game.result}</td>
                                         <td>{game.winner}</td>
                                         <td>{game.created}</td>
                                         <td>{game.updated}</td>
@@ -61,10 +64,9 @@ const Games = () => {
 export default Games;
 
 const StyledTable = styled.div`    
-    width:70%;
-    /* height: 70vh; */
-    margin:auto;
-    margin-top: 10px;
+    width:80%;
+    height: 70vh;
+    margin:20px auto;
     overflow-x:hidden;
     overflow-y:auto;
 
@@ -72,8 +74,8 @@ table{
     width:100%;  
     padding:0;  
     text-align:center;      
-    /* height: 70vh; */
-    /* border-collapse: collapse;   */
+    height: 70vh;
+    border-collapse: collapse;  
     
     th{
         background: white;
@@ -81,14 +83,14 @@ table{
         top: 0;
         color: #ef5350;
         border-bottom: #ef5350;
+        padding-bottom: 5px;
     }
     td{
         padding: 10px 0;
     }
    
     tbody{
-            /* height:80%;  */
-            
+            height:80%;             
         }  
     
 }

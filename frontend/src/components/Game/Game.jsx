@@ -24,7 +24,7 @@ class Game extends Component {
 
         const id = this.props.match.params.id;
         const response = await axios.get(`http://localhost:5000/games/${id}`);
-        const { board, currentTurn, status, winner,result } = response.data.data;
+        const { board, currentTurn, status, winner, result } = response.data.data;
 
         this.setState({
             board,
@@ -32,7 +32,7 @@ class Game extends Component {
             id,
             status,
             winner,
-            result            
+            result
         })
     }
 
@@ -46,12 +46,13 @@ class Game extends Component {
             id: this.state.id,
         });
 
-        const {currentTurn, status, winner} = response.data.data;
+        const { currentTurn, status, winner, result } = response.data.data;
 
         this.setState({
             currentTurn,
             status,
             winner,
+            result,
             showModal: status !== "started"
         })
     }
@@ -73,10 +74,10 @@ class Game extends Component {
         console.log(cells[id].classList)
     }
 
-    handleModal = () =>{
+    handleModal = () => {
         this.setState(prevState => ({
             showModal: !prevState.showModal
-          }));
+        }));
     }
 
 
@@ -93,16 +94,28 @@ class Game extends Component {
     }
 
     render() {
-        const { board, status, result, winner,showModal } = this.state;
+        const { board, status, result, winner, showModal, currentTurn } = this.state;
         const gameOver = status !== "started";
         console.log(status)
         return (
             <>
-                {showModal && <ModalWindow
-                title = {`Game over, ${result} ${winner}`}
-                handleModal = {this.handleModal}
-                /> }
-                    
+                {
+                    showModal && <ModalWindow
+                        title={`Game over, ${result} ${winner}`}
+                        handleModal={this.handleModal}
+                    />
+                }
+                <StyledTurn>
+                    {`Current Turn ${currentTurn}`}
+                </StyledTurn>
+
+
+                    {/* turno */}
+
+
+
+
+
                 <StyledBoard>
                     {board.map((cell, id) =>
                         <StyledCell
@@ -123,9 +136,20 @@ class Game extends Component {
 
 export default withRouter(Game);
 
+const StyledTurn = styled.div`
+    width: 180px;
+    height: 60px;
+    margin:auto;
+    border: solid 1px black ;
+    text-align:center;
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    border-radius: 15px;    
+`
+
 const StyledBoard = styled.div`
-width: 100vw;
-height: 100vh;
+margin: 20px auto;
 display:grid;
 justify-content:center;
 align-content:center;
@@ -150,7 +174,6 @@ grid-template-columns: repeat(3, auto);
 }
 `
 const StyledCell = styled.div`
-
     ${({ disable }) => disable && css`
         background-color: rgba(0, 0, 0, 0.01);
         cursor: not-allowed;

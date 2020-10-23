@@ -5,14 +5,13 @@ const ModalWindow = ({ title, handleModal }) => {
     return (
         <StyledModal onClick = {handleModal}>
             <StyledModalContent>
-            {title}
+            <p>{title}</p>
             </StyledModalContent>
         </StyledModal>
     );
 };
 
 export default ModalWindow;
-
 
 const StyledModal = styled.div`
     position: fixed;
