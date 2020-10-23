@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom'
 import axios from 'axios';
 import styled, { css } from 'styled-components';
 import constants from './../../constants/cosntants';
+import ModalWindow from '../ModalWindow/ModalWindow';
 
 class Game extends Component {
     constructor() {
@@ -13,7 +14,9 @@ class Game extends Component {
             currentTurn: "",
             id: "",
             status: "",
-            winner: ""
+            winner: "",
+            result: "",
+            showModal: false
         }
     }
 
@@ -21,14 +24,15 @@ class Game extends Component {
 
         const id = this.props.match.params.id;
         const response = await axios.get(`http://localhost:5000/games/${id}`);
-        const { board, currentTurn, status, winner } = response.data.data;
+        const { board, currentTurn, status, winner,result } = response.data.data;
 
         this.setState({
             board,
             currentTurn,
             id,
             status,
-            winner
+            winner,
+            result            
         })
     }
 
@@ -42,10 +46,13 @@ class Game extends Component {
             id: this.state.id,
         });
 
+        const {currentTurn, status, winner} = response.data.data;
+
         this.setState({
-            currentTurn: response.data.data.currentTurn,
-            status: response.data.data.status,
-            winner: response.data.data.winner
+            currentTurn,
+            status,
+            winner,
+            showModal: status !== "started"
         })
     }
 
@@ -66,6 +73,12 @@ class Game extends Component {
         console.log(cells[id].classList)
     }
 
+    handleModal = () =>{
+        this.setState(prevState => ({
+            showModal: !prevState.showModal
+          }));
+    }
+
 
     handleClick = (id) => {
         if (!this.state.board[id] && this.state.status === "started") {
@@ -80,15 +93,21 @@ class Game extends Component {
     }
 
     render() {
-        const { board, status } = this.state;        
-
+        const { board, status, result, winner,showModal } = this.state;
+        const gameOver = status !== "started";
+        console.log(status)
         return (
             <>
+                {showModal && <ModalWindow
+                title = {`Game over, ${result} ${winner}`}
+                handleModal = {this.handleModal}
+                /> }
+                    
                 <StyledBoard>
                     {board.map((cell, id) =>
                         <StyledCell
                             disable={board[id]}
-                            gameOver = {status !== "started"}
+                            gameOver={gameOver}
                             key={id}
                             className="cell"
                             onClick={() => this.handleClick(id)}>
@@ -115,7 +134,7 @@ grid-template-columns: repeat(3, auto);
 .cell{
     width:${constants.BOARD.CELL_SIZE};
     height:${constants.BOARD.CELL_SIZE};    
-    border: 1px solid};
+    border: 1px solid;
 }
 .cell:nth-child(1n+1){
     border-top:none;
@@ -130,7 +149,6 @@ grid-template-columns: repeat(3, auto);
     border-bottom:none;
 }
 `
-
 const StyledCell = styled.div`
 
     ${({ disable }) => disable && css`
