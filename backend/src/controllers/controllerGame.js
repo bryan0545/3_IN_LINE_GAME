@@ -1,8 +1,5 @@
 const gameModel = require('../models/modelGame');
 const tools = require('../tools/tools');
-const constants = require('./../constants/constants');
-
-
 
 const getGames = (async (req, res) => {
     try {
@@ -12,110 +9,106 @@ const getGames = (async (req, res) => {
         games.map(game => returnedGames.push(game.cleanGame()));
 
         res.json({
-            message: "Games found",
+            message: 'Games found',
             data: returnedGames,
-            error: ""
+            error: '',
         });
     } catch (error) {
-        console.log(error.message)
         res.json({
-            message: "",
+            message: '',
             data: {},
-            error: error.message
+            error: error.message,
         });
     }
+    return;
 });
 
 const postGame = (async (req, res) => {
     try {
-        const newGame = new gameModel()
+        const newGame = new gameModel();
         const dbGame = await newGame.save();
         res.json({
-            message: "Game Created",
+            message: 'Game Created',
             data: dbGame.cleanGame(),
-            error: ""
+            error: '',
         });
     } catch (error) {
         res.json({
-            message: "",
+            message: '',
             data: {},
-            error: error.message
+            error: error.message,
         });
     }
+    return;
 });
 
 const putGame = (async (req, res) => {
-
     if (!req.params.id || !req.body || !req.body.board) {
         res.json({
-            message: "",
+            message: '',
             data: {},
-            error: "Missing board to update the game."
+            error: 'Missing board to update the game.',
         });       
-    } else if (req.body.status !== 'started') {
-        console.log("The game is over")
+    } else if (req.body.status !== 'started') {        
         res.json({
-            message: "The game is over",
+            message: 'The game is over',
             data: {},
-            error: ""
+            error: '',
         }); 
     } else {
-        const body = req.body
+        const body = req.body;
 
         // Check for win
         if (tools.checkIfWin(body.board)) {
-            console.log("WIN");
-            body.status = "finished";
+            body.status = 'finished';
             body.winner = body.currentTurn;
-            body.result = "won";
+            body.result = 'won';
         }
         // Check for draw
         else if (tools.checkIfDraw(req.body.board)) {
-            console.log("DRAW");
-            body.status = "finished";
-            body.result = "draw";
+            body.status = 'finished';
+            body.result = 'draw';
         }
         // Continue the game
         else {
-            console.log("CONTINUE")
             body.currentTurn = tools.nextTurn(body.currentTurn);
         }
 
         try {            
             await gameModel.findByIdAndUpdate(req.params.id, body);
             const response = await gameModel.findById(req.params.id);
-
             res.json({
-                message: "Game Updated",
+                message: 'Game Updated',
                 data: response.cleanGame(),
-                error: ""
+                error: '',
             });
         } catch (error) {
             res.json({
-                message: "",
+                message: '',
                 data: {},
-                error: error.message
+                error: error.message,
             });
         }
     }
+    return;
 });
-
 
 const getGame = async (req, res) => {
     const game = await gameModel.findById(req.params.id);
     if (game !== null) {
         res.json({
-            message: "",
+            message: '',
             data: game.cleanGame(),
-            error: ""
+            error: '',
         });
     } else {
         res.json({
-            message: "",
+            message: '',
             data: {},
-            error: "Game not Found"
+            error: 'Game not Found',
         });
     }
+    return;
 };
 
 module.exports = { getGames, postGame, putGame, getGame };

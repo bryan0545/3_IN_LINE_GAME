@@ -19,12 +19,12 @@ const gameSchema = new Schema({
     },
     winner: {
         type: String,
-        default: "",
+        default: '',
         required: false,
     },
     result: {
         type: String,
-        default: "",
+        default: '',
         required: false,
     }
 }, {
@@ -44,4 +44,4 @@ gameSchema.methods.cleanGame = function cleanGame() {
     return gameObj;
 };
 
-module.exports = model('Game', gameSchema)
+module.exports = model('Game', gameSchema);

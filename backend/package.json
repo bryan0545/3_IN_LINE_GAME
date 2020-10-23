@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "lintDev": "eslint src/**"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
     "mongoose": "^5.10.9"
   },
   "devDependencies": {
+    "eslint": "^7.11.0",
     "nodemon": "^2.0.6"
   }
 }
