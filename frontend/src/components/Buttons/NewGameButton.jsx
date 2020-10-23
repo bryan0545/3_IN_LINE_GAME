@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom'
-import {StyledNewButton} from './styleButton'
+import {StyledNewButton} from './StyleButton'
 import axios from 'axios';
 
 
