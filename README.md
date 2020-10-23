@@ -1,6 +1,5 @@
 # 3_IN_LINE_GAME
-
-This is a Web App where the user can create, read, update and delete contacts; Also the user can apply some filters to the contacts.
+This is a Web App of a game know as 3 in line.
 
 ## Overview
 This is a repo of Web App created using React, Styled Components, Node.js, Express and Mongoose.
