@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import constants from './../../constants/cosntants'
 
 const Navigation = () => {
     return (
@@ -15,7 +16,7 @@ const Navigation = () => {
 export default Navigation;
 
 const StyledNavbar = styled.nav`
-    background-color: royalblue;   
+    background-color: ${constants.COLORS.SECOND};   
     margin: 0px;
     padding: 0px;
     position: fixed;
@@ -38,16 +39,15 @@ const StyledNavbar = styled.nav`
         font-family: arial;
         display: block;
         padding: 14px 16px;
-        color: white;   
+        color: ${constants.COLORS.THREETH};   
         text-align: center;        
         text-decoration: none;
         transition: background-color .5s;
         text-transform: uppercase;
-        font-weight: bold;
-        
+        font-weight: bold;        
 
         :hover{
-            background-color: #2141A0;            
+            background-color:${constants.COLORS.BODY}; 
         }
     
     }

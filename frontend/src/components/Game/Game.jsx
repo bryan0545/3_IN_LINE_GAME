@@ -155,6 +155,7 @@ justify-content:center;
 align-content:center;
 grid-template-columns: repeat(3, auto);
 
+
 .cell{
     width:${constants.BOARD.CELL_SIZE};
     height:${constants.BOARD.CELL_SIZE};    
@@ -184,7 +185,7 @@ const StyledCell = styled.div`
 
     ${({ disable }) => !disable && css`
         &:hover{
-            box-shadow: 0 3px 8px 0 rgba(255,0,0, .08  )
+            box-shadow: 0 3px 8px 0 rgba(255,0,0, .08)
         }
     `}
 
