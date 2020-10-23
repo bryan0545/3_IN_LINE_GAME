@@ -34,7 +34,8 @@ class Game extends Component {
             id,
             status,
             winner,
-            result
+            result,
+            showModal: status !== "started"
         })
     }
 
@@ -103,7 +104,7 @@ class Game extends Component {
             <GameStyled>
                 {
                     showModal && <ModalWindow
-                        title={`Game over, ${result} ${winner}`}
+                        title={`Game over, ${result} " ${winner.toLocaleUpperCase()} "`}
                         handleModal={this.handleModal}
                     />
                 }

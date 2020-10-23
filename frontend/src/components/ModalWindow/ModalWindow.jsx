@@ -1,11 +1,15 @@
 import React from 'react';
-import styled from 'styled-components'
+import styled from 'styled-components';
+import cosntants from './../../constants/cosntants';
+import NewGameButton from './../Buttons/NewGameButton';
+
 
 const ModalWindow = ({ title, handleModal }) => {
     return (
         <StyledModal onClick = {handleModal}>
             <StyledModalContent>
-            <p>{title}</p>
+                <p>{title}</p>
+                <NewGameButton/>
             </StyledModalContent>
         </StyledModal>
     );
@@ -24,16 +28,28 @@ const StyledModal = styled.div`
 `
 
 const StyledModalContent = styled.div`
-    position:fixed;
+    position:fixed;    
     top: 50%;
     left:50%;
     transform: translate(-50%, -50%);
-    width:20%;
-    min-height:10%;    
-    background-color: white;    
-    box-shadow:0 0 10px rgba(0,0,0,.5);
+    min-width:320px;
+    min-height:120px;
+    display:flex;
+    flex-flow:column nowrap;  
+    justify-content:center;
+    align-items:center;             
+    box-shadow:0 0 10px rgba(0,0,0,.8);
     z-index: 101;
     overflow-y: auto;  
-    padding: 40px;
+    padding: 10px;
     border-radius: 5px;
+    background-color: ${cosntants.COLORS.BACK_BODY}; 
+    p{
+        color: ${cosntants.COLORS.SECOND_LETER}; 
+        font-size:20px;
+        margin:5px;
+    }
+    button{
+        margin-top:10px;
+    }
 `
