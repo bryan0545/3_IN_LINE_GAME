@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import axios from 'axios';
 import ModalWindow from '../ModalWindow/ModalWindow';
-import { StyledNewButton } from '../Buttons/StyleButton';
+import { StyledNewButton } from '../Buttons/styleButton';
 import {StyledTitle, GameStyled, StyledButtonsDiv, StyledTurn, StyledBoard,StyledCell} from './styleGame'
 
 class Game extends Component {
