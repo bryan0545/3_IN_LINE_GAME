@@ -2,8 +2,6 @@ import constants from '../../constants/cosntants';
 import styled from 'styled-components'
 
 export const StyledNewButton = styled.button`
-
-
 text-transform: uppercase;
 font-size:15px;
 font-weight:bold;
